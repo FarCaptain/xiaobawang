@@ -1,6 +1,12 @@
 # 小霸王出题器
 a simple arithmetic worksheet generator for elementary school students.
-a single pratice.
+
+a simple practice. Only core code shown.
+
+My essay on this Project:
+[Automated generation of customized algebraic expressions using binary expression trees](https://drive.google.com/file/d/1jcjdrd8z8vtPRIHWAin4EWeG1TOyY4Mw/view?usp=sharing)
+
+[![Waifu UI](https://z3.ax1x.com/2021/09/25/4rl7vD.png)](https://imgtu.com/i/4rl7vD)
 
 --------
 
@@ -14,6 +20,4 @@ a single pratice.
 - 支持设定算式是否带有括号
 
 ### 了解一下
-- 这个小东西本意是学习交流使用，只有一部分核心代码。
-- 这个项目还有另一部分代码，有空整理以后拿上来。
-
+- 这个小东西本意是学习交流使用，只放上来一部分核心代码。

@@ -1,6 +1,11 @@
+/*
+"Automated generation of customized algebraic expressions using binary expression trees"
+(A substantiation of my Writing Sample)
+By YuanQu
+*/
 using System;
 
-namespace 出题小霸王
+namespace ExpressionGenerator
 {
     public class calcTree
     {
@@ -16,7 +21,7 @@ namespace 出题小霸王
                 withBrack = false;
                 val = 0;
                 flag = 'N';
-                preFlag = 'N';//the potential flag; if ==N, not extendable (only without bracker)
+                preFlag = 'N';//the potential flag; if ==N, not extendable (only without bracket)
             }
         };
         static int maxn;//max value of a number
@@ -32,7 +37,7 @@ namespace 出题小霸王
         int FQed = -1;
         int[] highQue = new int[2];// '*' '/'
         int HQed = -1;
-
+        multi multiple = new multi();
 
         int prePrior = -1;//+-=>0 */=>1
         int preInd = -1;
@@ -136,13 +141,17 @@ namespace 出题小霸王
                 {
                     int tmp = flagQue[ran.Next() % (FQed + 1)];
                     tree[lft].preFlag = flagBox[tmp / 2,tmp % 2];
-                    tmp = highQue[ran.Next() % (HQed + 1)]; //'*'||'/'
-                    tree[rig].preFlag = flagBox[tmp / 2,tmp % 2];
+                    if (HQed == -1) tree[rig].preFlag = 'N';
+                    else
+                    {
+                        tmp = highQue[ran.Next() % (HQed + 1)]; //'*'||'/'
+                        tree[rig].preFlag = flagBox[tmp / 2, tmp % 2];
+                    }
                 }
             }
             else if (tree[cur].flag == '*')
             {
-                tree[lft].val = multi.randFact(tree[cur].val);
+                tree[lft].val = multiple.randFact(tree[cur].val);
                 tree[rig].val = tree[cur].val / tree[lft].val;
                 if (useBrack)
                 {
@@ -186,8 +195,8 @@ namespace 出题小霸王
                     tree[rig].preFlag = 'N';
                 }
             }
-            leaf_que[ind] = (cur << 1) + 1;//push two son into queue
-            if(useBrack||tree[cur].flag!='/') leaf_que[++leaf_ed] = (cur << 1) + 2;
+            leaf_que[ind] = lft;//push two son into queue
+            if(useBrack||tree[rig].preFlag!='N') leaf_que[++leaf_ed] = (cur << 1) + 2;
         }//without 'meaningless' brackers
 
 
@@ -244,9 +253,94 @@ namespace 出题小霸王
         }
 
     }
+	
+    public class PrimePool
+    {
+
+        public static bool[] isprime = new bool[90005];
+        public static int[] prime = new int[8720];//8713
+        public static int totPrime = 0;
+
+        public static void prePrime()//sieve of Eratosthenes
+        {
+            isprime[0] = isprime[1] = true;
+            for (int i = 2; i <= 300; ++i)//sqrt(90k)
+            {
+                if (!isprime[i])
+                    for (int j = i * i; j <= 90000; j += i)
+                    {
+                        isprime[j] = true;
+                    }
+            }
+            for (int i = 0; i <= 90000; ++i)
+            {
+                if (!isprime[i])
+                {
+                    prime[totPrime++] = i;
+                }
+            }
+        }
+    }
+
+    public class multi
+    {
+        struct breakPrime
+        {
+            internal int p, q;
+        };
+
+        private int quickPow(int p, int q)
+        {
+            int ret = 1;
+            while (q != 0)
+            {
+                if ((q & 1) == 1)
+                {
+                    ret *= p;
+                }
+                q >>= 1;
+                p = p * p;
+            }
+            return ret;
+        }
+
+        public int randFact(int num)//generate a factor of num
+        {
+            if (num <= 0) return 1;
+            int totBreak = 0;
+            breakPrime[] bp = new breakPrime[100];
+            for (int i = 0; i < PrimePool.totPrime && PrimePool.prime[i] * PrimePool.prime[i] <= num; ++i)
+            {
+                if (num % PrimePool.prime[i] == 0)
+                {
+                    int cnt = 0;
+                    bp[totBreak].p = PrimePool.prime[i];
+                    while (num % PrimePool.prime[i] == 0)
+                    {
+                        num /= PrimePool.prime[i];
+                        cnt++;
+                    }
+                    bp[totBreak].q = cnt;
+                    totBreak++;
+                }
+            }
+            if (num != 1)
+            {
+                bp[totBreak].p = num;
+                bp[totBreak].q = 1;
+                totBreak++;
+            }
+
+            int fact = 1;
+            var seed = Guid.NewGuid().GetHashCode();
+            Random ran = new Random(seed);
+            for (int i = 0; i < totBreak; ++i)
+            {
+                if(i == 0) fact *= bp[i].p;
+                else fact *= quickPow(bp[i].p, ran.Next() % (bp[i].q + 1));
+            }
+            return fact;
+        }
+    }
 }
 
-/*
- * 加减乘除
- * 括号
- */
