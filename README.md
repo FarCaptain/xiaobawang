@@ -1,7 +1,7 @@
 # 小霸王出题器
-a simple arithmetic worksheet generator for elementary school students.
+a customizable arithmetic worksheet generator for elementary school students.
 
-a simple practice. Only core code shown.
+Only core code shown.
 
 My essay on this Project:
 [Automated generation of customized algebraic expressions using binary expression trees](https://drive.google.com/file/d/1jcjdrd8z8vtPRIHWAin4EWeG1TOyY4Mw/view?usp=sharing)
